@@ -21,20 +21,19 @@
 #include "chprintf.h"
 #include "usbcfg.h"
 
-
 /*
  * Red LED blinker thread, times are in milliseconds.
  */
 static WORKING_AREA(waThread1, 128);
 static msg_t Thread1(void *arg) {
 
-  (void)arg;
-  chRegSetThreadName("blinker");
-  while (TRUE) {
-    palTogglePad(GPIOC, 15);
-    chThdSleepMilliseconds(500);
-  }
-  return 0;
+	(void)arg;
+	chRegSetThreadName("blinker");
+	while (TRUE) {
+		palTogglePad(GPIOC, 15);
+		chThdSleepMilliseconds(500);
+	}
+	return 0;
 }
 
 #define SHELL_WA_SIZE THD_WA_SIZE(1024)
@@ -65,10 +64,23 @@ static void cmd_reboot(BaseSequentialStream *chp, int argc, char *argv[]) {
 	NVIC_SystemReset();
 }
 
+static void cmd_btn(BaseSequentialStream *chp, int argc, char *argv[]) {
+	(void) argc;
+	(void) argv;
+
+	uint8_t i;
+
+	for (i = 0; i < 10; i++) {
+		chprintf(chp, "btn is %d\r\n", (uint8_t)palReadPad(GPIOD, 0));
+		chThdSleepMilliseconds(250);
+	}
+}
+
 static const ShellCommand shCmds[] = {
 	{"test",      cmd_test},
 	{"free", cmd_mem},
 	{"reboot", cmd_reboot},
+	{"btn", cmd_btn},
 	{NULL, NULL}
 };
 
@@ -92,35 +104,36 @@ int main(void) {
    * - Kernel initialization, the main() function becomes a thread and the
    *   RTOS is active.
    */
-  halInit();
-  chSysInit();
-  palSetPadMode(GPIOC, 15, PAL_MODE_OUTPUT_PUSHPULL);
+	halInit();
+	chSysInit();
+	palSetPadMode(GPIOC, 15, PAL_MODE_OUTPUT_PUSHPULL);
+	palSetPadMode(GPIOD, 0, PAL_MODE_INPUT_PULLDOWN);
 
-  shellInit();
+	shellInit();
 
   /*
    * Activates the serial driver 2 using the driver default configuration.
    */
-  usbStart(serusbcfg.usbp, &usbcfg);
-  sduObjectInit(&SDU1);
-  sduStart(&SDU1, &serusbcfg);
+	usbStart(serusbcfg.usbp, &usbcfg);
+	sduObjectInit(&SDU1);
+	sduStart(&SDU1, &serusbcfg);
 
   /*
    * Creates the blinker thread.
    */
-  chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
+	chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
 
   /*
    * Normal main() thread activity, in this demo it does nothing except
    * sleeping in a loop and check the button state.
    */
-  while (TRUE) {
-	  if (!sh) {
-		  sh = shellCreate(&shCfg, SHELL_WA_SIZE, NORMALPRIO);
-	  } else if (chThdTerminated(sh)) {
-		  chThdRelease(sh);
-		  sh = NULL;
-	  }
-	  chThdSleepMilliseconds(500);
-  }
+	while (TRUE) {
+		if (!sh) {
+			sh = shellCreate(&shCfg, SHELL_WA_SIZE, NORMALPRIO);
+		} else if (chThdTerminated(sh)) {
+			chThdRelease(sh);
+			sh = NULL;
+		}
+		chThdSleepMilliseconds(500);
+	}
 }
