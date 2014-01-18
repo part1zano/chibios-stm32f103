@@ -21,6 +21,7 @@
 #include "chprintf.h"
 #include "usbcfg.h"
 
+
 /*
  * Red LED blinker thread, times are in milliseconds.
  */
@@ -30,7 +31,7 @@ static msg_t Thread1(void *arg) {
 	(void)arg;
 	chRegSetThreadName("blinker");
 	while (TRUE) {
-		palTogglePad(GPIOC, 15);
+		palTogglePad(GPIOB, 9);
 		chThdSleepMilliseconds(500);
 	}
 	return 0;
@@ -71,7 +72,7 @@ static void cmd_btn(BaseSequentialStream *chp, int argc, char *argv[]) {
 	uint8_t i;
 
 	for (i = 0; i < 10; i++) {
-		chprintf(chp, "btn is %d\r\n", (uint8_t)palReadPad(GPIOD, 0));
+		chprintf(chp, "btn is %d\r\n", (uint8_t)palReadPad(GPIOB, 7));
 		chThdSleepMilliseconds(250);
 	}
 }
@@ -106,8 +107,8 @@ int main(void) {
    */
 	halInit();
 	chSysInit();
-	palSetPadMode(GPIOC, 15, PAL_MODE_OUTPUT_PUSHPULL);
-	palSetPadMode(GPIOD, 0, PAL_MODE_INPUT_PULLDOWN);
+	palSetPadMode(GPIOB, 9, PAL_MODE_OUTPUT_PUSHPULL);
+	palSetPadMode(GPIOB, 7, PAL_MODE_INPUT_PULLDOWN);
 
 	shellInit();
 

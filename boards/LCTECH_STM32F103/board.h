@@ -25,7 +25,7 @@
  * Board identifier.
  */
 #define BOARD_OLIMEX_STM32_P103
-#define BOARD_NAME              "Olimex STM32-P103"
+#define BOARD_NAME              "LC Technology STM32F103C8T6"
 
 /*
  * Board frequencies.
@@ -41,6 +41,8 @@
 /*
  * IO pins assignments.
  */
+
+/*
 #define GPIOA_BUTTON            0
 #define GPIOA_SPI1NSS           4
 
@@ -52,7 +54,7 @@
 #define GPIOC_CAN_CNTL          10
 #define GPIOC_USB_DISC          11
 #define GPIOC_LED               12
-
+*/
 /*
  * I/O ports initial setup, this configuration is established soon after reset
  * in the initialization code.
@@ -108,11 +110,11 @@
  * PC6  - Normal input because there is an external resistor.
  * PC7  - Normal input because there is an external resistor.
  * PC10 - Push Pull output (CAN CNTRL).
- * PC11 - Push Pull output (USB DISC).
+ * PC11 - Push Pull output (USB DISC). ^U Normal input
  * PC12 - Push Pull output (LED).
  */
 #define VAL_GPIOCCRL            0x44848888      /*  PC7...PC0 */
-#define VAL_GPIOCCRH            0x88833388      /* PC15...PC8 */
+#define VAL_GPIOCCRH            0x88834388      /* PC15...PC8 */
 #define VAL_GPIOCODR            0xFFFFFFFF
 
 /*
@@ -136,12 +138,12 @@
 /*
  * USB bus activation macro, required by the USB driver.
  */
-#define usb_lld_connect_bus(usbp) palClearPad(GPIOC, GPIOC_USB_DISC)
+#define usb_lld_connect_bus(usbp) palClearPad(GPIOA, 11)
 
 /*
  * USB bus de-activation macro, required by the USB driver.
  */
-#define usb_lld_disconnect_bus(usbp) palSetPad(GPIOC, GPIOC_USB_DISC)
+#define usb_lld_disconnect_bus(usbp) palSetPad(GPIOA, 11)
 
 #if !defined(_FROM_ASM_)
 #ifdef __cplusplus
