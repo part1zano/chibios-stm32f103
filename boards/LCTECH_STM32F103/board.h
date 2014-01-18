@@ -138,12 +138,12 @@
 /*
  * USB bus activation macro, required by the USB driver.
  */
-#define usb_lld_connect_bus(usbp) palClearPad(GPIOA, 11)
+//#define usb_lld_connect_bus(usbp) palClearPad(GPIOA, 11)
 
 /*
  * USB bus de-activation macro, required by the USB driver.
  */
-#define usb_lld_disconnect_bus(usbp) palSetPad(GPIOA, 11)
+//#define usb_lld_disconnect_bus(usbp) palSetPad(GPIOA, 11)
 
 #if !defined(_FROM_ASM_)
 #ifdef __cplusplus
