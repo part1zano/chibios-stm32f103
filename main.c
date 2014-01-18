@@ -21,24 +21,6 @@
 #include "chprintf.h"
 #include "usbcfg.h"
 
-#define USB_GPIO_PORT GPIOA
-#define USBDM_BIT 11
-#define USBDP_BIT 12
-void usb_lld_disconnect_bus(USBDriver *usbp)
-{
-	(void) usbp;
-	palClearPort(USB_GPIO_PORT, (1<<USBDM_BIT) | (1<<USBDP_BIT));
-	palSetPadMode(USB_GPIO_PORT, USBDM_BIT, PAL_MODE_OUTPUT_PUSHPULL);
-	palSetPadMode(USB_GPIO_PORT, USBDP_BIT, PAL_MODE_OUTPUT_PUSHPULL);
-}
-
-void usb_lld_connect_bus(USBDriver *usbp)
-{
-	(void) usbp;
-	palClearPort(USB_GPIO_PORT, (1<<USBDM_BIT) | (1<<USBDP_BIT));
-	palSetPadMode(USB_GPIO_PORT, USBDM_BIT, PAL_MODE_INPUT);
-	palSetPadMode(USB_GPIO_PORT, USBDM_BIT, PAL_MODE_INPUT);
-}
 
 /*
  * Red LED blinker thread, times are in milliseconds.
@@ -129,9 +111,7 @@ int main(void) {
 	palSetPadMode(GPIOB, 7, PAL_MODE_INPUT_PULLDOWN);
 
 	shellInit();
-	usbDisconnectBus(serusbcfg.usbp);
-	chThdSleepMilliseconds(500);
-	usbConnectBus(serusbcfg.usbp);
+
   /*
    * Activates the serial driver 2 using the driver default configuration.
    */
