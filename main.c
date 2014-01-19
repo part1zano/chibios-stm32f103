@@ -21,6 +21,7 @@
 #include "chprintf.h"
 #include "usbcfg.h"
 
+
 #define USB_GPIO_PORT GPIOA
 #define USBDM_BIT 11
 #define USBDP_BIT 12
@@ -40,9 +41,11 @@ void usb_lld_connect_bus(USBDriver *usbp)
 	palSetPadMode(USB_GPIO_PORT, USBDM_BIT, PAL_MODE_INPUT);
 }
 
+
 /*
  * Red LED blinker thread, times are in milliseconds.
  */
+uint16_t period = 500;
 static WORKING_AREA(waThread1, 128);
 static msg_t Thread1(void *arg) {
 
@@ -50,7 +53,23 @@ static msg_t Thread1(void *arg) {
 	chRegSetThreadName("blinker");
 	while (TRUE) {
 		palTogglePad(GPIOB, 9);
-		chThdSleepMilliseconds(500);
+		chThdSleepMilliseconds(period);
+	}
+	return 0;
+}
+
+static WORKING_AREA(waBtnThread, 128);
+static msg_t BtnThread(void *arg) {
+	(void) arg;
+	chRegSetThreadName("btn");
+	while (TRUE) {
+		while (!palReadPad(GPIOB, 7)) {}
+		if (period <= 50) {
+			period = 1000;
+		} else {
+			period = period/2;
+		}
+		chThdSleepMilliseconds(250);
 	}
 	return 0;
 }
@@ -143,6 +162,7 @@ int main(void) {
    * Creates the blinker thread.
    */
 	chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
+	chThdCreateStatic(waBtnThread, sizeof(waBtnThread), NORMALPRIO, BtnThread, NULL);
 
   /*
    * Normal main() thread activity, in this demo it does nothing except

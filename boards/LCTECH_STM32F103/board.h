@@ -24,7 +24,7 @@
 /*
  * Board identifier.
  */
-#define BOARD_OLIMEX_STM32_P103
+#define BOARD_LCTECH_STM32F103
 #define BOARD_NAME              "LC Technology STM32F103C8T6"
 
 /*
@@ -41,6 +41,10 @@
 /*
  * IO pins assignments.
  */
+
+#define USB_GPIO_PORT GPIOA
+#define USBDM_BIT 11
+#define USBDP_BIT 12
 
 /*
 #define GPIOA_BUTTON            0
@@ -149,7 +153,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-  void boardInit(void);
+	void boardInit(void);
 #ifdef __cplusplus
 }
 #endif
