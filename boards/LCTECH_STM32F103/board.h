@@ -42,9 +42,6 @@
  * IO pins assignments.
  */
 
-#define USB_GPIO_PORT GPIOA
-#define USBDM_BIT 11
-#define USBDP_BIT 12
 
 /*
 #define GPIOA_BUTTON            0
