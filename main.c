@@ -52,7 +52,7 @@ static msg_t Thread1(void *arg) {
 	(void)arg;
 	chRegSetThreadName("blinker");
 	while (TRUE) {
-		palTogglePad(GPIOB, 9);
+		palTogglePad(GPIOB, GPIOB_LED);
 		chThdSleepMilliseconds(period);
 	}
 	return 0;
@@ -63,7 +63,7 @@ static msg_t BtnThread(void *arg) {
 	(void) arg;
 	chRegSetThreadName("btn");
 	while (TRUE) {
-		while (!palReadPad(GPIOB, 7)) {}
+		while (!palReadPad(GPIOB, GPIOB_BTN1)) {}
 		if (period <= 50) {
 			period = 1000;
 		} else {
@@ -109,7 +109,7 @@ static void cmd_btn(BaseSequentialStream *chp, int argc, char *argv[]) {
 	uint8_t i;
 
 	for (i = 0; i < 10; i++) {
-		chprintf(chp, "btn is %d\r\n", (uint8_t)palReadPad(GPIOB, 7));
+		chprintf(chp, "btn is %d\r\n", (uint8_t)palReadPad(GPIOB, GPIOB_BTN1));
 		chThdSleepMilliseconds(250);
 	}
 }
@@ -144,8 +144,8 @@ int main(void) {
    */
 	halInit();
 	chSysInit();
-	palSetPadMode(GPIOB, 9, PAL_MODE_OUTPUT_PUSHPULL);
-	palSetPadMode(GPIOB, 7, PAL_MODE_INPUT_PULLDOWN);
+	palSetPadMode(GPIOB, GPIOB_LED, PAL_MODE_OUTPUT_PUSHPULL);
+	palSetPadMode(GPIOB, GPIOB_BTN1, PAL_MODE_INPUT_PULLDOWN);
 
 	shellInit();
 	usbDisconnectBus(serusbcfg.usbp);
