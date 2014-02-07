@@ -196,8 +196,8 @@ bool_t oneWireSend (OneWireDriver* drv, const uint8_t *command, uint8_t len)
 {
   const uint32_t owLen = len*8;
   uint8_t cmdBuf[owLen];
-
-  for (uint32_t i=0;  i<len; i++) {
+	uint32_t i;
+  for (i=0;  i<len; i++) {
     oneWirePack (command[i], &(cmdBuf[i*8]));
   }
   
@@ -222,8 +222,8 @@ bool_t oneWireReceive (OneWireDriver* drv, uint8_t *buffer, uint8_t len)
   uartStartSend (drv->config.uartd, owLen, (void *) owBufferWrite);
   chBSemWait (&(drv->semSent));
   chBSemWait (&(drv->semReceive));
-  
-  for (uint32_t i=0;  i<len; i++) {
+  uint32_t i; 
+  for (i=0;  i<len; i++) {
     buffer[i] = oneWireUnpack (&(owBufferRead[i*8]));
   }
 
@@ -325,7 +325,8 @@ void oneWireRealeaseBus (void)
 
 static void oneWirePack (uint8_t cmd, uint8_t buffer[8])
 {
-  for (uint32_t i=0;  i<8; i++) {
+uint32_t i; 
+  for (i=0;  i<8; i++) {
     buffer[i] = (cmd & (1 << i)) ? 0xff : 0x00;
   }
 }
@@ -333,8 +334,8 @@ static void oneWirePack (uint8_t cmd, uint8_t buffer[8])
 static uint8_t oneWireUnpack (uint8_t buffer[8])
 {
   uint8_t res = 0;
-
-  for (uint32_t i=0;  i<8; i++) {
+uint32_t i; 
+  for (i=0;  i<8; i++) {
     if (buffer[i] == 0xff) {
       res |=  (1 << i);
     }
@@ -345,10 +346,11 @@ static uint8_t oneWireUnpack (uint8_t buffer[8])
 
 static void oneWireSerialMode (OneWireDriver* drv, SerialMode sm)
 {
-  const uint32_t modeTx = 
+  const uint32_t modeTx = PAL_MODE_INPUT_PULLUP | PAL_MODE_OUTPUT_OPENDRAIN;
+  /*
     PAL_MODE_ALTERNATE(drv->config.dqAlternate) | PAL_STM32_OTYPE_OPENDRAIN 
     | PAL_MODE_INPUT_PULLUP | PAL_STM32_OSPEED_HIGHEST | PAL_STM32_MODE_ALTERNATE;
-  
+  */
   if (sm == drv->currentSm) 
     return;
 
