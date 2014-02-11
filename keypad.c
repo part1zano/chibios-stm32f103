@@ -7,7 +7,7 @@ const uint8_t rows[NROWS] = {4, 5, 6, 7};  // XXX :: gpio pins
 
 void prepareKeypad(void) {
 	uint8_t i;
-	for (i - 0; i < NCOLS; i++) {
+	for (i = 0; i < NCOLS; i++) {
 		palSetPad(COL_GPIO_PORT, cols[i]);
 	}
 }
