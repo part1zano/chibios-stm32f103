@@ -75,8 +75,8 @@ void OneWire_WriteBit(uint8_t bit)
 void OneWire_WriteByte(uint8_t data)
 {
 	uint8_t _data = data;
-
-	for(int i=0; i<8; i++) 
+	uint8_t i;
+	for(i=0; i<8; i++) 
 	{
 		OneWire_WriteBit(_data & 0x01);
 		_data>>= 1;
@@ -86,8 +86,9 @@ void OneWire_WriteByte(uint8_t data)
 uint8_t OneWire_ReadByte(void)
 {
 	uint8_t data = 0;
-
-	for(int i=0; i<7; i++)
+	
+	uint8_t i;
+	for(i=0; i<7; i++)
 	{
 		if(OneWire_ReadBit())
 			data|= 0x80;
@@ -134,7 +135,8 @@ float DS18B20_GetTemp(uint8_t SensorNum)
 	else
 	{
 		OneWire_WriteByte(DS18B20_MATCHROM_CMD);	
-		for(unsigned char i=0; i<8; i++)
+		uint8_t i;
+		for(i=0; i<8; i++)
 		{
 			OneWire_WriteByte(DS18B20_SERIAL_NUMBER[SensorNum-1][i]);
 		}
@@ -164,7 +166,8 @@ void DS18B20_StartConversion(uint8_t SensorNum)
 	else
 	{
 		OneWire_WriteByte(DS18B20_MATCHROM_CMD);	
-		for(unsigned char i=0; i<8; i++)
+		uint8_t i;
+		for(i=0; i<8; i++)
 		{
 			OneWire_WriteByte(DS18B20_SERIAL_NUMBER[SensorNum-1][i]);
 		}
@@ -231,8 +234,8 @@ void OneWire_FindROM(uint8_t *diff, uint8_t id[])
 void DS18B20_GetROM(uint8_t SensorNum, uint8_t *buffer)
 {
 	if(SensorNum>SensorCount || SensorNum==0)return;
-
-	for(int i=0; i<8; i++)
+	uint8_t i;
+	for(i=0; i<8; i++)
 		buffer[i] = DS18B20_SERIAL_NUMBER[SensorNum-1][i];		
 }
 
