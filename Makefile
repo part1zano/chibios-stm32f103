@@ -82,7 +82,6 @@ CSRC = $(PORTSRC) \
        $(CHIBIOS)/os/various/syscalls.c \
 	   $(CHIBIOS)/os/various/chprintf.c \
 	   $(CHIBIOS)/os/various/shell.c \
-	   oneWire.c \
 	   ds18b20.c \
 	   keypad.c \
 	   usbcfg.c \
