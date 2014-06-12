@@ -1,0 +1,3 @@
+[submodule "ChibiOS-RT"]
+	path = ChibiOS-RT
+	url = git@github.com:part1zano/ChibiOS-RT
