@@ -45,6 +45,7 @@ void usb_lld_connect_bus(USBDriver *usbp)
 /*
  * Red LED blinker thread, times are in milliseconds.
  */
+
 uint16_t period = 500;
 static THD_WORKING_AREA(waThread1, 128);
 static  THD_FUNCTION(Thread1, arg) {
@@ -63,7 +64,9 @@ static THD_FUNCTION(BtnThread, arg) {
 	(void) arg;
 	chRegSetThreadName("btn");
 	while (TRUE) {
-		while (!palReadPad(GPIOB, GPIOB_BTN1)) {}
+		while (!palReadPad(GPIOB, GPIOB_BTN1)) {
+			chThdSleepMilliseconds(1);
+		}
 		if (period <= 50) {
 			period = 1000;
 		} else {

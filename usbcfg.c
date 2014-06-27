@@ -270,7 +270,7 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
   case USB_EVENT_ADDRESS:
     return;
   case USB_EVENT_CONFIGURED:
-    chSysLock();
+    chSysLockFromISR();
 
     /* Enables the endpoints specified into the configuration.
        Note, this callback is invoked from an ISR so I-Class functions
@@ -281,7 +281,7 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
     /* Resetting the state of the CDC subsystem.*/
     sduConfigureHookI(&SDU1);
 
-    chSysUnlock();
+    chSysUnlockFromISR();
     return;
   case USB_EVENT_SUSPEND:
     return;
