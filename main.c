@@ -46,8 +46,8 @@ void usb_lld_connect_bus(USBDriver *usbp)
  * Red LED blinker thread, times are in milliseconds.
  */
 uint16_t period = 500;
-static WORKING_AREA(waThread1, 128);
-static msg_t Thread1(void *arg) {
+static THD_WORKING_AREA(waThread1, 128);
+static  THD_FUNCTION(Thread1, arg) {
 
 	(void)arg;
 	chRegSetThreadName("blinker");
@@ -58,8 +58,8 @@ static msg_t Thread1(void *arg) {
 	return 0;
 }
 
-static WORKING_AREA(waBtnThread, 128);
-static msg_t BtnThread(void *arg) {
+static THD_WORKING_AREA(waBtnThread, 128);
+static THD_FUNCTION(BtnThread, arg) {
 	(void) arg;
 	chRegSetThreadName("btn");
 	while (TRUE) {
@@ -74,7 +74,7 @@ static msg_t BtnThread(void *arg) {
 	return 0;
 }
 
-#define SHELL_WA_SIZE THD_WA_SIZE(1024)
+#define SHELL_WA_SIZE THD_WORKING_AREA_SIZE(1024)
 
 static void cmd_test(BaseSequentialStream *chp, int argc, char *argv[]) {
 	(void) argc;
@@ -133,7 +133,7 @@ static const ShellConfig shCfg = {
  * Application entry point.
  */
 int main(void) {
-	Thread *sh = NULL;
+	thread_t *sh = NULL;
 
   /*
    * System initializations.
@@ -171,7 +171,7 @@ int main(void) {
 	while (TRUE) {
 		if (!sh) {
 			sh = shellCreate(&shCfg, SHELL_WA_SIZE, NORMALPRIO);
-		} else if (chThdTerminated(sh)) {
+		} else if (chThdTerminatedX(sh)) {
 			chThdRelease(sh);
 			sh = NULL;
 		}
