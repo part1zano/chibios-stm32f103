@@ -21,7 +21,7 @@
 #include "chprintf.h"
 #include "usbcfg.h"
 
-
+RTCTime
 #define USB_GPIO_PORT GPIOA
 #define USBDM_BIT 11
 #define USBDP_BIT 12
