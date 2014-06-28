@@ -1,6 +1,6 @@
 #include "ch.h"
 #include "hal.h"
-#include "pcf8574_1602lcd.h"
+#include "pcflcd.h"
 
 msg_t pcflcd_init() {
 	i2cAcquireBus(&PCF_I2CD);
@@ -15,6 +15,13 @@ msg_t pcflcd_init() {
 		}
 		chThdSleepMicroseconds(delays[i]);
 	}
+	i2cReleaseBus(&PCF_I2CD);
+	return MSG_OK;
+}
+
+msg_t pcflcd_write_char(const char chr) {
+	i2cAcquireBus(&PCF_I2CD);
+
 	i2cReleaseBus(&PCF_I2CD);
 	return MSG_OK;
 }
