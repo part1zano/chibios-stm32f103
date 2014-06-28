@@ -84,6 +84,10 @@ msg_t lcd_status = MSG_OK;
 static void cmd_writeLCD(BaseSequentialStream *chp, int argc, char *argv[]) {
 	uint8_t i;
 	uint8_t j = 0;
+	if (lcd_status != MSG_OK) {
+		chprintf(chp, "LCD status NOK: %d", lcd_status);
+		return;
+	}
 
 	for (i = 0; i < argc; i++) {
 		while (argv[i][j]) {
