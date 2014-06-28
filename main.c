@@ -20,6 +20,7 @@
 #include "shell.h"
 #include "chprintf.h"
 #include "usbcfg.h"
+#include "pcflcd.h"
 
 #define USB_GPIO_PORT GPIOA
 #define USBDM_BIT 11
@@ -78,6 +79,20 @@ static THD_FUNCTION(BtnThread, arg) {
 
 #define SHELL_WA_SIZE THD_WORKING_AREA_SIZE(1024)
 
+msg_t lcd_status = MSG_OK;
+
+static void cmd_writeLCD(BaseSequentialStream *chp, int argc, char *argv[]) {
+	uint8_t i;
+	uint8_t j = 0;
+
+	for (i = 0; i < argc; i++) {
+		while (argv[i][j]) {
+			pcflcd_write_char(argv[i][j]);
+		}
+		chprintf(chp, "Wrote %s to lcd\r\n", argv[1]);
+	}
+}
+
 static void cmd_test(BaseSequentialStream *chp, int argc, char *argv[]) {
 	(void) argc;
 	(void) argv;
@@ -121,6 +136,7 @@ static const ShellCommand shCmds[] = {
 	{"free", cmd_mem},
 	{"reboot", cmd_reboot},
 	{"btn", cmd_btn},
+	{"lcdwrite", cmd_writeLCD},
 	{NULL, NULL}
 };
 
@@ -159,7 +175,9 @@ int main(void) {
 	palSetPadMode(GPIOB, 5, PAL_MODE_STM32_ALTERNATE_OPENDRAIN);
 	palSetPadMode(GPIOB, 6, PAL_MODE_STM32_ALTERNATE_OPENDRAIN);
 
+
 	i2cStart(&I2CD1, &i2c_config);
+	lcd_status = pcflcd_init();
 
 	shellInit();
 	usbDisconnectBus(serusbcfg.usbp);
