@@ -43,7 +43,7 @@
  */
 
 #define GPIOB_LED 9
-#define GPIOB_BTN1 7
+#define GPIOB_BTN1 15
 /*
 #define GPIOA_BUTTON            0
 #define GPIOA_SPI1NSS           4
