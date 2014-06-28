@@ -131,6 +131,13 @@ static const ShellConfig shCfg = {
 	shCmds
 };
 
+static const I2CConfig i2c_config = {
+    OPMODE_I2C,
+    100000,
+    STD_DUTY_CYCLE
+};
+
+
 /*
  * Application entry point.
  */
@@ -148,6 +155,11 @@ int main(void) {
 	chSysInit();
 	palSetPadMode(GPIOB, GPIOB_LED, PAL_MODE_OUTPUT_PUSHPULL);
 	palSetPadMode(GPIOB, GPIOB_BTN1, PAL_MODE_INPUT_PULLDOWN);
+
+	palSetPadMode(GPIOB, 5, PAL_MODE_STM32_ALTERNATE_OPENDRAIN);
+	palSetPadMode(GPIOB, 6, PAL_MODE_STM32_ALTERNATE_OPENDRAIN);
+
+	i2cStart(&I2CD1, &i2c_config);
 
 	shellInit();
 	usbDisconnectBus(serusbcfg.usbp);
