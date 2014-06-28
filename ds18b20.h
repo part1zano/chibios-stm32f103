@@ -1,32 +1,31 @@
-#ifndef __DS18B20
-#define __DS18B20
+#ifndef __DS_1820_B_H__
+#define __DS_1820_B_H__
 
-#include "ch.h"
-#include "hal.h"
-
-#define DS18B20_CONVERT_T_CMD				0x44
-#define DS18B20_WRITE_STRATCHPAD_CMD		0x4E
-#define DS18B20_READ_STRATCHPAD_CMD			0xBE
-#define DS18B20_COPY_STRATCHPAD_CMD			0x48
-#define DS18B20_RECALL_E_CMD				0xB8
-#define DS18B20_SEARCH_ROM_CMD				0xF0
-#define DS18B20_READ_POWER_SUPPLY_CMD		0xB4
-#define DS18B20_SKIPROM_CMD					0xCC
-#define DS18B20_MATCHROM_CMD				0x55
-
-#define MAX_SENSORS 						5
-
-#define DS18B20_GPIO						GPIOC
-#define DS18B20_DATAPIN					    0
+#include "oneWire.h"
 
 
+/* 
+   initialise and configure sensors 
+ */
+void     ds1820BInit (OneWireDriver* drv, const OneWireRomAddress *address, 
+		      const uint8_t precBits);
 
-void DS18B20_Init(void);
-void DS18B20_StartConversion(uint8_t SensorNum);
-void DS18B20_GetROM(uint8_t SensorNum, uint8_t *buffer);
 
-uint8_t DS18B20_ScanBus(void);
+/*
+  ask conversion, wait for the conversion to be done, then return value,
+  could be the simplest way to acquire data when there is only one sensor
+*/
+float    ds1820BGetTemp (OneWireDriver* drv, const OneWireRomAddress *address);
 
-float DS18B20_GetTemp(uint8_t SensorNum);
 
-#endif
+/*
+  separate ask conversion command and get values.
+  this is the fastest way to acquire data when there is a lot of sensors :
+  1/ ask conversion for all sensors
+  2/ wait time accordingly to precision (see datasheet)
+  3/ get the temperature for all sensors
+ */
+void     ds1820BAskTemp (OneWireDriver* drv, const OneWireRomAddress *address);
+float    ds1820BGGetTempFromRam (OneWireDriver* drv, const OneWireRomAddress *address);
+
+#endif //__DS_1820_B_H__
