@@ -106,6 +106,7 @@ CSRC = $(PORTSRC) \
 	   usbcfg.c \
 	   pcflcd.c \
 	   usb_hid.c \
+	   lcd5110.c \
        main.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
