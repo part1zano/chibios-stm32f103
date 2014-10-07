@@ -21,7 +21,6 @@
 #include "chprintf.h"
 #include "usbcfg.h"
 #include "pcflcd.h"
-#include "usb_hid.h"
 
 #define USB_GPIO_PORT GPIOA
 #define USBDM_BIT 11

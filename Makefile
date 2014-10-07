@@ -105,7 +105,6 @@ CSRC = $(PORTSRC) \
 	   $(CHIBIOS)/os/various/shell.c \
 	   usbcfg.c \
 	   pcflcd.c \
-	   usb_hid.c \
 	   lcd5110.c \
        main.c
 
