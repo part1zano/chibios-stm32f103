@@ -104,16 +104,6 @@ static void cmd_test(BaseSequentialStream *chp, int argc, char *argv[]) {
 	TestThread(chp);
 }
 
-static void cmd_mem(BaseSequentialStream *chp, int argc, char *argv[]) {
-//	size_t n, size;
-	(void) argv;
-	(void) argc;
-
-//	n = chHeapStatus(&size);
-	chprintf(chp, "core free memory : %u bytes\r\n", chCoreStatus());
-//	chprintf(chp, "heap fragments   : %u\r\n", n);
-//	chprintf(chp, "heap free total  : %u bytes\r\n", size);
-}
 
 static void cmd_reboot(BaseSequentialStream *chp, int argc, char *argv[]) {
 	(void) argc;
@@ -137,7 +127,6 @@ static void cmd_btn(BaseSequentialStream *chp, int argc, char *argv[]) {
 
 static const ShellCommand shCmds[] = {
 	{"test",      cmd_test},
-	{"free", cmd_mem},
 	{"reboot", cmd_reboot},
 	{"btn", cmd_btn},
 	{"lcdwrite", cmd_writeLCD},
